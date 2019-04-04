@@ -17,6 +17,7 @@
 	
 	digitenumero1: .asciiz "Digite o primeiro numero\n"
 	digitenumero2: .asciiz "Digite o segundo numero\n"
+
 	
 	digitenumero: .asciiz "Digite o numero\n"
 	
@@ -26,11 +27,18 @@
 	
 	virgula: .asciiz ","
 	
+	str_IMC: .asciiz "Calculo do IMC\n"
+	digitenumero_kg: .asciiz "Digite peso em kg:\n"
+	digitenumero_m: .asciiz "Digite altura em metros:\n"
+	fatorial_qto: .asciiz "Fatorial de quanto?\n"
 	raiz_qto: .asciiz "Raiz de quanto? (Digite um valor decimal ou inteiro)\n"
 	fibonacci1: .asciiz "Fibonacci de [a,b]\n"
 	fibonacci2: .asciiz "Digite o valor a\n"
 	fibonacci3: .asciiz "Digite o valor b\n"
-	
+	multiplicacao: .asciiz "Multiplicacao\n"
+	digite1numero_m_d: .asciiz "Digite primeiro numero(ate 16 bits):\n"
+	digite2numero_m_d: .asciiz "Digite segundo numero(ate 16 bits):\n"
+	divisao: .asciiz "Divisao\n"
 	
 	
 	fibonacci_erro: .asciiz "'b' deve ser maior ou igual a 'a'"
@@ -154,21 +162,101 @@ caso_2:
 	li $v0,1 #imprime o resultado
 	syscall
 	
+	j press_enter
 	
-	li $v0, 4
-	la $a0, continuar #mensagem para apentar Enter para continuar
-	syscall
 	
 	
 caso_3:
 	addi $t0, $zero, 3 #$t0 = 3
 	bne $t0,$t1, caso_4 #if ($t1 == 3) continua aqui, se nao testa caso_4
 	
+	multip:
+		li $v0, 4                   #Carrega codigo imprimir string
+		la $a0, multiplicacao	    #Move a string "multiplicacao"
+		syscall		            #Chama o SO para realizar operacao
+	
+	
+
+		li $v0, 4		   #Carrega codigo imprimir string
+		la $a0, digite1numero_m_d      #Move a string "digite1numero"
+		syscall			   #Chama o SO para realizar operacao
+	
+		
+		addi $t3, $zero, 46340     #Adiconando valor "65535"(2^16-1) ao registrador $t3
+	
+
+		li $v0, 5		   #Carrega codigo ler inteiro
+		syscall			   #Chama o SO para realizar operacao
+		move $t0, $v0              #Move inteiro lido para $t0	
+	
+		bgt $t0, $t3, multip       #Verificando se e ate 16 bits.
+	
+		li $v0, 4		   #Carrega codigo imprimir string
+		la $a0, digite2numero_m_d      #Move a string "digite2numero"
+		syscall			   #Chama o SO para realizar operacao
+	
+	
+		li $v0, 5	           #Carrega codigo ler inteiro
+		syscall			   #Chama o SO para realizar operacao
+		move $t1, $v0		   #Move inteiro lido para $t1
+	
+		bgt $t1, $t3, multip       #Verificando se e ate 16 bits.
+	
+		mul $t2, $t0, $t1        #Multiplica conteudo de $t0 com $t1 e armazena em $t2
+	
+	
+		li $v0, 1		   #Carrega codigo imprimir inteiro
+		move $a0, $t2		   #Move $t2(resultado multiplicacao) para $a0
+		syscall			   #Chama o SO para realizar operacao
+	
+		j press_enter
+	
 	
 
 caso_4: 
 	addi $t0, $zero, 4 #$t0 = 4
 	bne $t0,$t1, caso_5 #if ($t1 == 4) continua aqui, se nao testa caso_5
+	
+	li $v0, 4                   #Carrega codigo imprimir string
+	la $a0, divisao	    	    #Move a string "divisao"
+	syscall		            #Chama o SO para realizar operacao
+	
+	
+	
+	li $v0, 4		   #Carrega codigo imprimir string
+	la $a0, digite1numero_m_d      #Move a string "digite1numero"
+	syscall			   #Chama o SO para realizar operacao
+	
+	
+	
+	
+
+	li $v0, 7		   #Carrega codigo ler double
+	syscall			   #Chama o SO para realizar operacao
+	mov.d $f2, $f0             #Move double lido para $f2	
+	
+	
+	
+	li $v0, 4		   #Carrega codigo imprimir string
+	la $a0, digite2numero_m_d     #Move a string "digite2numero"
+	syscall			   #Chama o SO para realizar operacao
+	
+	
+	li $v0, 7	           #Carrega codigo ler double
+	syscall			   #Chama o SO para realizar operacao
+	mov.d $f4, $f0		   #Move double lido para $f4
+	
+	
+	
+	div.d $f6, $f2, $f4        #Divide conteudo de $f2 por $f4 e armazena em $f6
+	
+	
+	li $v0, 3		   #Carrega codigo imprimir double
+	mov.d $f12, $f6		   #Move $f6(resultado divisao) para $f12
+	syscall			   #Chama o SO para realizar operacao
+	
+	j press_enter
+	
 	
 caso_5:
 	addi $t0, $zero, 5 #$t0 = 5
@@ -201,15 +289,76 @@ caso_6:
 caso_7:
 	addi $t0, $zero, 7 #$t0 = 7
 	bne $t0,$t1, caso_8 #if ($t1 == 7) continua aqui, se nao testa caso_8
-	
+
+#IMC
 caso_8:
 	addi $t0, $zero, 8 #$t0 = 8 
 	bne $t0,$t1, caso_9 #if ($t1 == 8) continua aqui, se nao testa caso_9
+	
+	li $v0, 4                   #Carrega codigo imprimir string
+	la $a0, str_IMC	    	    #Move a string "divisao"
+	syscall		            #Chama o SO para realizar operacao
+	
+	
+	
+	li $v0, 4		   #Carrega codigo imprimir string
+	la $a0, digitenumero_kg      #Move a string "digitenumero_kg"
+	syscall			   #Chama o SO para realizar operacao
+	
+	
+	
+	
+
+	li $v0, 7		   #Carrega codigo ler double
+	syscall			   #Chama o SO para realizar operacao
+	mov.d $f2, $f0             #Move double lido para $f2(peso)	
+	
+	
+	
+	li $v0, 4		   #Carrega codigo imprimir string
+	la $a0, digitenumero_m      #Move a string "digitenumerom"
+	syscall			   #Chama o SO para realizar operacao
+	
+	
+	li $v0, 7	           #Carrega codigo ler double
+	syscall			   #Chama o SO para realizar operacao
+	mov.d $f4, $f0		   #Move double lido para $f4(altura)
+	
+	
+	
+	mul.d  $f4, $f4, $f4        #Multiplica conteudo de $f4 por $f4 e armazena em $f4
+	
+	div.d $f6, $f2, $f4
+	
+	
+	li $v0, 3		   #Carrega codigo imprimir double
+	mov.d $f12, $f6		   #Move $f6(resultado divisao) para $f12
+	syscall			   #Chama o SO para realizar operacao
+	
+	j press_enter
 
 #Fatorial
 caso_9:
 	addi $t0, $zero, 9 #$$t0 = 9
 	bne $t0,$t1, caso_10 #if ($t1 == 9) continua aqui, se nao testa caso_10
+	
+	li $v0, 4			# Carrega a funcao de printar uma string
+	la $a0, fatorial_qto# Posiciona no registrador
+	syscall			# Printa
+	
+	li $v0, 5			# Carrega a funcao de ler um int
+	syscall			# Le o int
+	
+	move $a0, $v0		# Move o numero lido (ate onde fazer o fatorial) para o registrador $t0
+	jal fatorial	# Chama o fatorial, colocando o $ra na proxima instrucao
+	
+	move $t1, $v0	# Colocando o resultado do fatorial em $t1 para printar
+	
+	li $v0, 1		# Carrega a funcao de printar o numero resultado do fatorial
+	move $a0, $t1	# Coloca o resultado em $a0
+	syscall		# Printa o resultado
+	
+	j press_enter
 
 #Fibonacci
 caso_10:
@@ -259,10 +408,7 @@ continue:
 caso_11:
 	addi $t0, $zero, 11 #$t0 = 11
 	bne $t0,$t1, opcao_lida
-	j exit
 	
-	
-exit:
 	li $v0,10 #encerra o programa
 	syscall
 
@@ -490,3 +636,27 @@ raiz:
 				jr $ra
 
 #Fim Raiz
+
+#Fatorial
+fatorial:
+		
+		addi $sp, $sp, -8 # Alocando espaco na pilha para armazenar o numero digitado
+		sw $a0, 4($sp)    # e o conteudo de $ra para quando finalizar a funcao
+		sw $ra, 0($sp)    # a0 esta' 4 posicoes distantes de $sp e $ra a 0
+		addi $v0, $zero, 1	# Armazenando 1 em v0 para realizar o calculo de multiplicacao
+		
+		
+		loop_fat:
+
+			mul $v0, $v0, $a0			# $v0 = $v0*$a0
+			addi $a0, $a0, -1			# $a0--
+			beq $a0, $zero, fim_loop_fat	# Enquanto $a0 nao chegar a zero
+			j loop_fat				# realiza o loop
+	
+		fim_loop_fat:
+			
+			lw $a0, 4($sp)			# Carregando de volta os valores nos
+			lw $ra, 0($sp)			# registradores para retornar a posicao
+			addi $sp, $sp, 8		# salva em $ra
+			jr $ra
+#Fim Fatorial
