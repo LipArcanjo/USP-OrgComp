@@ -17,7 +17,7 @@
 	
 	digitenumero1: .asciiz "Digite o primeiro numero\n"
 	digitenumero2: .asciiz "Digite o segundo numero\n"
-
+	
 	
 	digitenumero: .asciiz "Digite o numero\n"
 	
@@ -39,7 +39,9 @@
 	digite1numero_m_d: .asciiz "Digite primeiro numero(ate 16 bits):\n"
 	digite2numero_m_d: .asciiz "Digite segundo numero(ate 16 bits):\n"
 	divisao: .asciiz "Divisao\n"
-	
+	potencia: .asciiz "Potencia:\n"
+	digite_base: .asciiz "Digite a base\n"
+	digite_expoente: .asciiz "Digite o expoente\n"
 	
 	fibonacci_erro: .asciiz "'b' deve ser maior ou igual a 'a'"
 	
@@ -113,7 +115,7 @@ opcao_lida:
 	
 	j press_enter
 
-
+#Subtracao
 caso_2:	
 	addi $t0, $zero, 2 #$t0 = 2
 	bne $t0,$t1, caso_3 #if ($t1 == 2) continua aqui, se nao testa caso_3
@@ -165,7 +167,7 @@ caso_2:
 	j press_enter
 	
 	
-	
+#Multiplicacao	
 caso_3:
 	addi $t0, $zero, 3 #$t0 = 3
 	bne $t0,$t1, caso_4 #if ($t1 == 3) continua aqui, se nao testa caso_4
@@ -212,7 +214,7 @@ caso_3:
 		j press_enter
 	
 	
-
+#Divisao
 caso_4: 
 	addi $t0, $zero, 4 #$t0 = 4
 	bne $t0,$t1, caso_5 #if ($t1 == 4) continua aqui, se nao testa caso_5
@@ -257,10 +259,55 @@ caso_4:
 	
 	j press_enter
 	
-	
+#Potencia	
 caso_5:
 	addi $t0, $zero, 5 #$t0 = 5
 	bne $t0,$t1, caso_6 #if ($t1 == 5) continua aqui, se nao testa caso_6
+	
+	
+	li $v0, 4                   #Carrega codigo imprimir string
+	la $a0, potencia	    #Move a string "potencia"
+	syscall		            #Chama o SO para realizar operacao
+	
+	
+	
+	li $v0, 4		   #Carrega codigo imprimir string
+	la $a0, digite_base	   #Move a string "digite_base"
+	syscall			   #Chama o SO para realizar operacao
+	
+
+	li $v0, 5		   #Carrega codigo ler inteiro
+	syscall			   #Chama o SO para realizar operacao
+	move $t2, $v0              #Move inteiro lido para $t2	
+	
+	
+	li $v0, 4		   #Carrega codigo imprimir string
+	la $a0, digite_expoente    #Move a string "digite_expoente"
+	syscall			   #Chama o SO para realizar operacao
+	
+	
+	li $v0, 5	           #Carrega codigo ler inteiro
+	syscall			   #Chama o SO para realizar operacao
+	move $t3, $v0		   #Move inteiro lido para $t3
+	
+	addi $s0, $zero, 1         #Seta $s0 = 1 (Onde serao armazenadas as sucessivas multiplicacoes)
+	
+	loop_pot:
+		beq $t3, $zero, end_loop_pot     #Caso $t3 igual a zero, potencia ja foi calculada(a cada multiuplicacao decresce 1 na potencia)
+		mul $s0, $s0, $t2		 #Faz a multiplicacao da base com $s0(inicialmente $s0 = 1)
+		addi $t3, $t3, -1	         #Decresce potencia em 1
+		j loop_pot			 #Volta comeco loop da potencia	
+		
+		
+	end_loop_pot:
+	
+	
+	
+	li $v0, 1		   	#Printa resposta
+	move $a0, $s0		   
+	syscall			  
+	
+	j press_enter
 
 #Raiz
 caso_6:
@@ -285,7 +332,7 @@ caso_6:
 		syscall
 		
 		j press_enter
-	
+#Tabuada	
 caso_7:
 	addi $t0, $zero, 7 #$t0 = 7
 	bne $t0,$t1, caso_8 #if ($t1 == 7) continua aqui, se nao testa caso_8
@@ -404,7 +451,8 @@ continue:
 	jal fibonacci
 	
 	j press_enter
-	
+
+#Encerrar Programa	
 caso_11:
 	addi $t0, $zero, 11 #$t0 = 11
 	bne $t0,$t1, opcao_lida
