@@ -1,3 +1,7 @@
+#UNIVERSIDADE DE SAO PAULO - INSTITUTO DE CIENCIAS MATEMATICAS E DE COMPUTACAO
+#1º Trabalho Prático de Organizacao e Arquitetura de Computadores
+#Alunos: Guilherme Alves Lindo, Guilherme Targon Marques Barcellos, Luan Icaro Pinto Arcanjo e Mateus Ferreira Gomes
+
 .data
 	.align 0
 	menu0: .asciiz "\nMenu:\n"
@@ -33,7 +37,7 @@
 	digitenumero_kg: .asciiz "Digite peso em kg:\n"
 	digitenumero_m: .asciiz "Digite altura em metros:\n"
 	fatorial_qto: .asciiz "Fatorial de quanto?\n"
-	raiz_qto: .asciiz "Raiz de quanto? (Digite um valor decimal ou inteiro)\n"
+	raiz_qto: .asciiz "Raiz de quanto? (Digite um valor decimal ou inteiro maior ou igual a zero)\n"
 	fibonacci1: .asciiz "Fibonacci de [a,b]\n"
 	fibonacci2: .asciiz "Digite o valor a\n"
 	fibonacci3: .asciiz "Digite o valor b\n"
@@ -188,7 +192,7 @@ caso_3:
 		syscall			   #Chama o SO para realizar operacao
 	
 		
-		addi $t3, $zero, 46340     #Adiconando valor "46340"(raiz de (2^31-1)) ao registrador $t3
+		addi $t3, $zero, 32767     #Adiconando valor "32767"(raiz de (2^15-1)) ao registrador $t3
 	
 
 		li $v0, 5		   #Carrega codigo ler inteiro
@@ -319,7 +323,8 @@ caso_6:
 	bne $t0,$t1, caso_7 #if ($t1 == 6) continua aqui, se nao testa caso_7
 	
 		#LENDO OS VALORES
-
+	leitura_raiz:
+	
 		li $v0, 4			# Carrega a funcao de printar uma string
 		la $a0, raiz_qto	# Posiciona no registrador
 		syscall			# Printa
@@ -328,12 +333,30 @@ caso_6:
 		syscall			# Le o double (sobre o qual a raiz sera tirada)
 	
 		mov.d $f2, $f0		# Movendo o double lido para o registrador $f2
+		
+		li $t2, 0 				# Carregando 0 em $t2 para converter em double
+		mtc1.d $t2, $f4			# Movendo 0 de $t2 para $f4
+ 		cvt.d.w $f4, $f4			# Convertendo o conteudo de $f4 para double
+									
+		c.eq.d $f4, $f2
+		bc1t raiz_zero 
+		
+		c.lt.d $f2, $f4		#Caso numero seja menor que zero volta para leitura_raiz.
+		bc1t leitura_raiz 
 	
 		jal raiz			# Jump and link para realizar o procedimento
 	
 		li $v0, 3			# Printa a resposta
 		mov.d $f12, $f0	
 		syscall
+		
+	raiz_zero:
+	
+		li $v0, 3			# Printa 0
+		mov.d $f12, $f4	
+		syscall
+		
+		
 		
 		j press_enter
 #Tabuada	
@@ -407,43 +430,62 @@ caso_8:
 	la $a0, str_IMC	    	    #Move a string "str_IMC"
 	syscall		            #Chama o SO para realizar operacao
 	
+	leitura_IMC:
 	
-	
-	li $v0, 4		   #Carrega codigo imprimir string
-	la $a0, digitenumero_kg      #Move a string "digitenumero_kg"
-	syscall			   #Chama o SO para realizar operacao
-	
-	
+		li $v0, 4		   #Carrega codigo imprimir string
+		la $a0, digitenumero_kg      #Move a string "digitenumero_kg"
+		syscall			   #Chama o SO para realizar operacao
 	
 	
 
-	li $v0, 7		   #Carrega codigo ler double
-	syscall			   #Chama o SO para realizar operacao
-	mov.d $f2, $f0             #Move double lido para $f2(peso)	
+		li $v0, 7		   #Carrega codigo ler double
+		syscall			   #Chama o SO para realizar operacao
+		mov.d $f2, $f0             #Move double lido para $f2(peso)	
 	
 	
 	
-	li $v0, 4		   #Carrega codigo imprimir string
-	la $a0, digitenumero_m      #Move a string "digitenumero_m"
-	syscall			   #Chama o SO para realizar operacao
+		li $t2, 0 				# Carregando 0 em $t2 para converter em double
+		mtc1.d $t2, $f4			# Movendo 0 de $t2 para $f4
+ 		cvt.d.w $f4, $f4			# Convertendo o conteudo de $f4 para double
+									
+											
+		c.le.d $f2, $f4		#Caso numero seja menor que zero volta para leitura_IMC.
+		bc1t leitura_IMC 
+		
 	
 	
-	li $v0, 7	           #Carrega codigo ler double
-	syscall			   #Chama o SO para realizar operacao
-	mov.d $f4, $f0		   #Move double lido para $f4(altura)
+	leitura_altura:
+	
+		li $v0, 4		   #Carrega codigo imprimir string
+		la $a0, digitenumero_m      #Move a string "digitenumero_m"
+		syscall			   #Chama o SO para realizar operacao
+	
+	
+		li $v0, 7	           #Carrega codigo ler double
+		syscall			   #Chama o SO para realizar operacao
+		mov.d $f4, $f0		   #Move double lido para $f4(altura)
+		
+		
+		li $t2, 0 				# Carregando 0 em $t2 para converter em double
+		mtc1.d $t2, $f6			# Movendo 0 de $t2 para $f6
+ 		cvt.d.w $f6, $f6			# Convertendo o conteudo de $f6 para double
+									
+											
+		c.le.d $f4, $f6		#Caso numero seja menor que zero volta para leitura_IMC.
+		bc1t leitura_altura 
 	
 	
 	
-	mul.d  $f4, $f4, $f4        #Multiplica conteudo de $f4 por $f4 e armazena em $f4
+		mul.d  $f4, $f4, $f4        #Multiplica conteudo de $f4 por $f4 e armazena em $f4
+		
+		div.d $f6, $f2, $f4
 	
-	div.d $f6, $f2, $f4
 	
+		li $v0, 3		   #Carrega codigo imprimir double
+		mov.d $f12, $f6		   #Move $f6(resultado divisao) para $f12
+		syscall			   #Chama o SO para realizar operacao
 	
-	li $v0, 3		   #Carrega codigo imprimir double
-	mov.d $f12, $f6		   #Move $f6(resultado divisao) para $f12
-	syscall			   #Chama o SO para realizar operacao
-	
-	j press_enter
+		j press_enter
 
 #Fatorial
 caso_9:
