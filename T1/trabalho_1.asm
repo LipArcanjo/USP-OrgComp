@@ -24,6 +24,8 @@
 	sub: .asciiz " - " #mensagem utilizada na subtracao
 	igual: .asciiz " = "
 	soma: .asciiz " + " # Mensagem usada na soma	
+	barra_n: .asciiz "\n"
+	vezes: .asciiz " x "
 	
 	virgula: .asciiz ","
 	
@@ -42,6 +44,8 @@
 	potencia: .asciiz "Potencia:\n"
 	digite_base: .asciiz "Digite a base\n"
 	digite_expoente: .asciiz "Digite o expoente\n"
+	digite_tabuada: .asciiz "Digite um numero para exibir tabuada\n"
+	string_tabuada: .asciiz "Tabuada:\n"
 	
 	fibonacci_erro: .asciiz "'b' deve ser maior ou igual a 'a'"
 	
@@ -180,18 +184,18 @@ caso_3:
 	
 
 		li $v0, 4		   #Carrega codigo imprimir string
-		la $a0, digite1numero_m_d      #Move a string "digite1numero"
+		la $a0, digite1numero_m_d      #Move a string "digite1numero_m_d"
 		syscall			   #Chama o SO para realizar operacao
 	
 		
-		addi $t3, $zero, 46340     #Adiconando valor "65535"(2^16-1) ao registrador $t3
+		addi $t3, $zero, 46340     #Adiconando valor "46340"(raiz de (2^31-1)) ao registrador $t3
 	
 
 		li $v0, 5		   #Carrega codigo ler inteiro
 		syscall			   #Chama o SO para realizar operacao
 		move $t0, $v0              #Move inteiro lido para $t0	
 	
-		bgt $t0, $t3, multip       #Verificando se e ate 16 bits.
+		bgt $t0, $t3, multip       #Verificando se utrapassa multiplicando maximo.
 	
 		li $v0, 4		   #Carrega codigo imprimir string
 		la $a0, digite2numero_m_d      #Move a string "digite2numero"
@@ -202,7 +206,7 @@ caso_3:
 		syscall			   #Chama o SO para realizar operacao
 		move $t1, $v0		   #Move inteiro lido para $t1
 	
-		bgt $t1, $t3, multip       #Verificando se e ate 16 bits.
+		bgt $t1, $t3, multip       #Verificando se utrapassa multiplicando maximo.
 	
 		mul $t2, $t0, $t1        #Multiplica conteudo de $t0 com $t1 e armazena em $t2
 	
@@ -226,7 +230,7 @@ caso_4:
 	
 	
 	li $v0, 4		   #Carrega codigo imprimir string
-	la $a0, digite1numero_m_d      #Move a string "digite1numero"
+	la $a0, digite1numero_m_d      #Move a string "digite1numero_m_d"
 	syscall			   #Chama o SO para realizar operacao
 	
 	
@@ -240,7 +244,7 @@ caso_4:
 	
 	
 	li $v0, 4		   #Carrega codigo imprimir string
-	la $a0, digite2numero_m_d     #Move a string "digite2numero"
+	la $a0, digite2numero_m_d     #Move a string "digite2numero_m_d"
 	syscall			   #Chama o SO para realizar operacao
 	
 	
@@ -336,6 +340,63 @@ caso_6:
 caso_7:
 	addi $t0, $zero, 7 #$t0 = 7
 	bne $t0,$t1, caso_8 #if ($t1 == 7) continua aqui, se nao testa caso_8
+	
+	
+	
+	
+	li $v0, 4                   #Carrega codigo imprimir string
+	la $a0, string_tabuada	    #Move a string "string_tabuada"
+	syscall		            #Chama o SO para realizar operacao
+	
+	
+	
+	li $v0, 4		   #Carrega codigo imprimir string
+	la $a0, digite_tabuada      #Move a string "digite_tabuada"
+	syscall			   #Chama o SO para realizar operacao
+	
+
+	li $v0, 5		   #Carrega codigo ler inteiro
+	syscall			   #Chama o SO para realizar operacao
+	move $t4, $v0              #Move inteiro lido para $t4
+	
+	addi $t2, $zero, 11        #Variavel controle final loop
+	addi $t3, $zero, 1
+	
+	loop_tabuada:
+		beq $t3, $t2, end_loop_tabuada
+		mul $t5, $t3, $t4
+		
+		li $v0, 1		   #Carrega codigo imprimir inteiro
+		move $a0, $t3		   #Move $t3(contador tabuada) para $a0
+		syscall
+		
+		li $v0, 4		   #Carrega codigo imprimir string
+		la $a0, vezes 		   #Move a string "vezes"
+		syscall			  			   
+		
+		li $v0, 1		   #Carrega codigo imprimir inteiro
+		move $a0, $t4		   #Move $t4(numero) para $a0
+		syscall
+		
+		li $v0, 4		   #Carrega codigo imprimir string
+		la $a0, igual       	   #Move a string "igual"
+		syscall	
+		
+		li $v0, 1		   #Carrega codigo imprimir inteiro
+		move $a0, $t5		   #Move $t5(valor tabuada atual) para $a0
+		syscall
+		
+		li $v0, 4		   #Carrega codigo imprimir string
+		la $a0, barra_n            #Move a string "barra_n"
+		syscall		
+		
+		addi $t3, $t3, 1
+		j loop_tabuada
+	
+	
+	end_loop_tabuada:
+	
+	j press_enter
 
 #IMC
 caso_8:
@@ -343,7 +404,7 @@ caso_8:
 	bne $t0,$t1, caso_9 #if ($t1 == 8) continua aqui, se nao testa caso_9
 	
 	li $v0, 4                   #Carrega codigo imprimir string
-	la $a0, str_IMC	    	    #Move a string "divisao"
+	la $a0, str_IMC	    	    #Move a string "str_IMC"
 	syscall		            #Chama o SO para realizar operacao
 	
 	
@@ -363,7 +424,7 @@ caso_8:
 	
 	
 	li $v0, 4		   #Carrega codigo imprimir string
-	la $a0, digitenumero_m      #Move a string "digitenumerom"
+	la $a0, digitenumero_m      #Move a string "digitenumero_m"
 	syscall			   #Chama o SO para realizar operacao
 	
 	
