@@ -1,20 +1,24 @@
 #UNIVERSIDADE DE SAO PAULO - INSTITUTO DE CIENCIAS MATEMATICAS E DE COMPUTACAO
-#1º Trabalho Prático de Organizacao e Arquitetura de Computadores
-#Alunos: Guilherme Alves Lindo, Guilherme Targon Marques Barcellos, Luan Icaro Pinto Arcanjo e Mateus Ferreira Gomes
+#1Âº Trabalho PrÃ¡tico de Organizacao e Arquitetura de Computadores
+#Alunos: 
+# 	 Guilherme Alves Lindo			
+#	 Guilherme Targon Marques Barcellos 	
+# 	 Luan Icaro Pinto Arcanjo		10799230
+#	 Mateus Ferreira Gomes
 
 .data
 	.align 0
 	menu0: .asciiz "\nMenu:\n"
-	menu1: .asciiz "1 - Soma de 2 números\n"
-	menu2: .asciiz "2 - Subtracao de 2 números\n"
-	menu3: .asciiz "3 - Multiplicacao de 2 números\n"
-	menu4: .asciiz "4 - Divisao de 2 números\n"
+	menu1: .asciiz "1 - Soma de 2 numeros\n"
+	menu2: .asciiz "2 - Subtracao de 2 numeros\n"
+	menu3: .asciiz "3 - Multiplicacao de 2 numeros\n"
+	menu4: .asciiz "4 - Divisao de 2 numeros\n"
 	menu5: .asciiz "5 - Potencia de um numero\n"
 	menu6: .asciiz "6 - Raiz Quadrada\n"
-	menu7: .asciiz "7 - Tabuada de um número\n"
-	menu8: .asciiz "8 - Cálculo IMC\n"
-	menu9: .asciiz "9 - Fatorial de um número\n"
-	menu10: .asciiz "10 - Cálculo de sequencia de Fibonacci dado um intervalo\n"
+	menu7: .asciiz "7 - Tabuada de um numero\n"
+	menu8: .asciiz "8 - Calculo IMC\n"
+	menu9: .asciiz "9 - Fatorial de um numero\n"
+	menu10: .asciiz "10 - Calculo de sequencia de Fibonacci dado um intervalo\n"
 	menu11: .asciiz "11- Sair\n"
 	
 	continuar: .asciiz "\nAperte Enter para continuar\n"
@@ -36,7 +40,7 @@
 	str_IMC: .asciiz "Calculo do IMC\n"
 	digitenumero_kg: .asciiz "Digite peso em kg:\n"
 	digitenumero_m: .asciiz "Digite altura em metros:\n"
-	fatorial_qto: .asciiz "Fatorial de quanto?\n"
+	fatorial_qto: .asciiz "Fatorial de quanto?(maior ou igual a 0)\n"
 	raiz_qto: .asciiz "Raiz de quanto? (Digite um valor decimal ou inteiro maior ou igual a zero)\n"
 	fibonacci1: .asciiz "Fibonacci de [a,b]\n"
 	fibonacci2: .asciiz "Digite o valor a\n"
@@ -47,11 +51,14 @@
 	divisao: .asciiz "Divisao\n"
 	potencia: .asciiz "Potencia:\n"
 	digite_base: .asciiz "Digite a base\n"
-	digite_expoente: .asciiz "Digite o expoente\n"
+	digite_expoente: .asciiz "Digite o expoente(maior ou igual a zero)\n"
 	digite_tabuada: .asciiz "Digite um numero para exibir tabuada\n"
 	string_tabuada: .asciiz "Tabuada:\n"
 	
-	fibonacci_erro: .asciiz "'b' deve ser maior ou igual a 'a'"
+	fibonacci_erro: .asciiz "'b' deve ser maior ou igual a 'a'\n"
+	
+	
+	saindo: .asciiz "Saindo...\n"
 	
 .text
 .globl press_enter
@@ -192,15 +199,17 @@ caso_3:
 		syscall			   #Chama o SO para realizar operacao
 	
 		
-		addi $t3, $zero, 32767     #Adiconando valor "32767"(raiz de (2^15-1)) ao registrador $t3
-	
+		addi $t3, $zero, 32767     #Adiconando valor "32767"(2^15-1) ao registrador $t3, maximo de um numero inteiro de 16 bits
+		addi $t4, $zero, -32768    #Adiconando valor "-32768"(-2^15) ao registrador $t4, minimo de um numero inteiro de 16 bits
 
 		li $v0, 5		   #Carrega codigo ler inteiro
 		syscall			   #Chama o SO para realizar operacao
 		move $t0, $v0              #Move inteiro lido para $t0	
 	
-		bgt $t0, $t3, multip       #Verificando se utrapassa multiplicando maximo.
-	
+		bgt $t0, $t3, multip       #Verificando se ultrapassa multiplicando maximo.
+		bgt $t4, $t0, multip	   #Verificando se ultrapassa o minimo.
+		
+		
 		li $v0, 4		   #Carrega codigo imprimir string
 		la $a0, digite2numero_m_d      #Move a string "digite2numero"
 		syscall			   #Chama o SO para realizar operacao
@@ -211,7 +220,8 @@ caso_3:
 		move $t1, $v0		   #Move inteiro lido para $t1
 	
 		bgt $t1, $t3, multip       #Verificando se utrapassa multiplicando maximo.
-	
+		bgt $t4, $t1, multip	   #Verificando se ultrapassa o minimo.
+		
 		mul $t2, $t0, $t1        #Multiplica conteudo de $t0 com $t1 e armazena em $t2
 	
 	
@@ -226,7 +236,7 @@ caso_3:
 caso_4: 
 	addi $t0, $zero, 4 #$t0 = 4
 	bne $t0,$t1, caso_5 #if ($t1 == 4) continua aqui, se nao testa caso_5
-	
+divip:
 	li $v0, 4                   #Carrega codigo imprimir string
 	la $a0, divisao	    	    #Move a string "divisao"
 	syscall		            #Chama o SO para realizar operacao
@@ -236,16 +246,10 @@ caso_4:
 	li $v0, 4		   #Carrega codigo imprimir string
 	la $a0, digite1numero_m_d      #Move a string "digite1numero_m_d"
 	syscall			   #Chama o SO para realizar operacao
-	
-	
-	
-	
 
 	li $v0, 7		   #Carrega codigo ler double
 	syscall			   #Chama o SO para realizar operacao
 	mov.d $f2, $f0             #Move double lido para $f2	
-	
-	
 	
 	li $v0, 4		   #Carrega codigo imprimir string
 	la $a0, digite2numero_m_d     #Move a string "digite2numero_m_d"
@@ -255,7 +259,6 @@ caso_4:
 	li $v0, 7	           #Carrega codigo ler double
 	syscall			   #Chama o SO para realizar operacao
 	mov.d $f4, $f0		   #Move double lido para $f4
-	
 	
 	
 	div.d $f6, $f2, $f4        #Divide conteudo de $f2 por $f4 e armazena em $f6
@@ -288,15 +291,22 @@ caso_5:
 	syscall			   #Chama o SO para realizar operacao
 	move $t2, $v0              #Move inteiro lido para $t2	
 	
-	
+expoente:
+
 	li $v0, 4		   #Carrega codigo imprimir string
 	la $a0, digite_expoente    #Move a string "digite_expoente"
 	syscall			   #Chama o SO para realizar operacao
 	
 	
+	
 	li $v0, 5	           #Carrega codigo ler inteiro
 	syscall			   #Chama o SO para realizar operacao
+	
+	bgt $zero, $v0, expoente   #se o expoente lido for negativo, faz com que leia denovo
+	
 	move $t3, $v0		   #Move inteiro lido para $t3
+	
+	
 	
 	addi $s0, $zero, 1         #Seta $s0 = 1 (Onde serao armazenadas as sucessivas multiplicacoes)
 	
@@ -491,24 +501,27 @@ caso_8:
 caso_9:
 	addi $t0, $zero, 9 #$$t0 = 9
 	bne $t0,$t1, caso_10 #if ($t1 == 9) continua aqui, se nao testa caso_10
+
+	leitura_fat:
+		li $v0, 4			# Carrega a funcao de printar uma string
+		la $a0, fatorial_qto# Posiciona no registrador
+		syscall			# Printa
 	
-	li $v0, 4			# Carrega a funcao de printar uma string
-	la $a0, fatorial_qto# Posiciona no registrador
-	syscall			# Printa
+		li $v0, 5			# Carrega a funcao de ler um int
+		syscall			# Le o int
 	
-	li $v0, 5			# Carrega a funcao de ler um int
-	syscall			# Le o int
+		bgt $zero,$v0, leitura_fat # se inserir um numero < 0, eh um numero invalido e deve inserir denovo
 	
-	move $a0, $v0		# Move o numero lido (ate onde fazer o fatorial) para o registrador $t0
-	jal fatorial	# Chama o fatorial, colocando o $ra na proxima instrucao
+		move $a0, $v0		# Move o numero lido (ate onde fazer o fatorial) para o registrador $t0
+		jal fatorial	# Chama o fatorial, colocando o $ra na proxima instrucao
 	
-	move $t1, $v0	# Colocando o resultado do fatorial em $t1 para printar
+		move $t1, $v0	# Colocando o resultado do fatorial em $t1 para printar
 	
-	li $v0, 1		# Carrega a funcao de printar o numero resultado do fatorial
-	move $a0, $t1	# Coloca o resultado em $a0
-	syscall		# Printa o resultado
+		li $v0, 1		# Carrega a funcao de printar o numero resultado do fatorial
+		move $a0, $t1	# Coloca o resultado em $a0
+		syscall		# Printa o resultado
 	
-	j press_enter
+		j press_enter
 
 #Fibonacci
 caso_10:
@@ -520,45 +533,52 @@ caso_10:
 	syscall
 	
 	
-leituras:
-	li $v0, 4
-	la $a0, fibonacci2 #mensagem inserir 'a'
-	syscall
-	
-	li $v0,5 #leitura do 'a'
-	syscall
-	
-	add $t0, $zero,$v0 #$t0  = $a0(valor lido)
-	
-	li $v0, 4
-	la $a0, fibonacci3 #mensagem inserir 'b'
-	syscall
-	
-	li $v0,5 #leitura do 'b'
-	syscall
-
-
-	
-	add $a1, $zero, $v0 #$a1  = $v0(valor lido)
-	
-	#se b > a continua, se nao imprime a mensagem de erro e volta para a leitura
-	bge $a0, $t0, continue
+	leituras:
 		li $v0, 4
-		la $a0, fibonacci_erro #mensagem inserir 'b'
+		la $a0, fibonacci2 #mensagem inserir 'a'
 		syscall
+	
+		li $v0,5 #leitura do 'a'
+		syscall
+	
+		bge $zero, $v0, leituras # se inserir um numero <= 0, eh um numero invalido e deve inserir denovo
+	
+	leiturab:
+		add $t0, $zero,$v0 #$t0  = $a0(valor lido)
+	
+		li $v0, 4
+		la $a0, fibonacci3 #mensagem inserir 'b'
+		syscall
+	
+		li $v0,5 #leitura do 'b'
+		syscall
+
+		bge $zero, $v0, leiturab # se inserir um numero <= 0, eh um numero invalido e deve inserir denovo
+	
+		add $a1, $zero, $v0 #$a1  = $v0(valor lido)
+	
+		#se b > a continua, se nao imprime a mensagem de erro e volta para a leitura
+		bgt  $a1, $t0, continue
+			li $v0, 4
+			la $a0, fibonacci_erro #mensagem inserir 'b'
+			syscall
 		
-		j leituras
-continue:
-	add $a0, $zero, $t0 #$a0 = $t0 (valor de 'a')
+			j leituras
+	continue:
+		add $a0, $zero, $t0 #$a0 = $t0 (valor de 'a')
 	
-	jal fibonacci
+		jal fibonacci
 	
-	j press_enter
+		j press_enter
 
 #Encerrar Programa	
 caso_11:
 	addi $t0, $zero, 11 #$t0 = 11
 	bne $t0,$t1, opcao_lida
+	
+	li $v0, 4
+	la $a0, saindo #mensagem de saida
+	syscall
 	
 	li $v0,10 #encerra o programa
 	syscall
@@ -594,7 +614,7 @@ imprime_menu:
 	syscall
 	
 	li $v0, 4
-	la $a0, menu6 #imprime a sétima linha da mensagem do menu
+	la $a0, menu6 #imprime a sÃ©tima linha da mensagem do menu
 	syscall
 	
 	li $v0, 4
@@ -798,10 +818,10 @@ fatorial:
 		
 		
 		loop_fat:
-
+			beq $a0, $zero, fim_loop_fat	# Enquanto $a0 nao chegar a zero
 			mul $v0, $v0, $a0			# $v0 = $v0*$a0
 			addi $a0, $a0, -1			# $a0--
-			beq $a0, $zero, fim_loop_fat	# Enquanto $a0 nao chegar a zero
+			
 			j loop_fat				# realiza o loop
 	
 		fim_loop_fat:
