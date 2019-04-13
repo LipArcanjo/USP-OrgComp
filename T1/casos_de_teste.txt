@@ -1,0 +1,392 @@
+#UNIVERSIDADE DE SAO PAULO - INSTITUTO DE CIENCIAS MATEMATICAS E DE COMPUTACAO
+#1º Trabalho Pratico de Organizacao e Arquitetura de Computadores
+#Alunos: 
+# 	 Guilherme Alves Lindo			
+#	 Guilherme Targon Marques Barcellos 	
+# 	 Luan Icaro Pinto Arcanjo				10799230
+#	 Mateus Ferreira Gomes
+
+Para os casos de teste nao ficarem poluidos, ao inves que colocar todo o menu, estara escrito <MENU>, porem na execucao do programa aparecera todo o menu, segue abaixo como o menu esta:
+
+<Enter Pressionado> quer dizer que apertou enter no teclado
+
+Menu:
+1 - Soma de 2 numeros
+2 - Subtracao de 2 numeros
+3 - Multiplicacao de 2 numeros
+4 - Divisao de 2 numeros
+5 - Potencia de um numero
+6 - Raiz Quadrada
+7 - Tabuada de um numero
+8 - Calculo IMC
+9 - Fatorial de um numero
+10- Calculo de sequencia de Fibonacci dado um intervalo
+11- Sair
+
+@TESTE SOMA
+
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+1
+Digite o primeiro numero
+2
+Digite o segundo numero
+3
+2 + 3 = 5
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+1
+Digite o primeiro numero
+-50
+Digite o segundo numero
+10
+-50 + 10 = -40
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+1
+Digite o primeiro numero
+-50
+Digite o segundo numero
+-30
+-50 + -30 = -80
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+1
+Digite o primeiro numero
+2
+Digite o segundo numero
+-20
+2 + -20 = -18
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+11
+Saindo...
+
+
+
+@TESTE Subtracao
+
+
+
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+2
+Digite o primeiro numero
+2
+Digite o segundo numero
+3
+2 - 3 = -1
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+2
+Digite o primeiro numero
+-50
+Digite o segundo numero
+10
+-50 - 10 = -60
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+2
+Digite o primeiro numero
+-50
+Digite o segundo numero
+-30
+-50 - -30 = -20
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+1
+Digite o primeiro numero
+2
+Digite o segundo numero
+-20
+2 - -20 = -22
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+11
+Saindo...
+
+@Teste MULTIPLICACAO 
+
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+3
+Multiplicacao
+Digite primeiro numero(ate 16 bits):
+33000
+Multiplicacao
+Digite primeiro numero(ate 16 bits):
+2
+Digite segundo numero(ate 16 bits):
+2
+4
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+3
+Multiplicacao
+Digite primeiro numero(ate 16 bits):
+1
+Digite segundo numero(ate 16 bits):
+-33000
+Multiplicacao
+Digite primeiro numero(ate 16 bits):
+-10
+Digite segundo numero(ate 16 bits):
+12
+-120
+
+<MENU>
+11
+Saindo...
+
+
+@TESTE DIVISAO
+
+...
+
+
+
+@TESTE POTENCIA
+
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+5
+Digite a base
+2
+Digite o expoente(maior ou igual a zero)
+-3
+Digite o expoente(maior ou igual a zero)
+4
+16
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+5
+Digite a base
+-3
+Digite o expoente(maior ou igual a zero)
+3
+-27
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+5
+Digite a base
+50
+Digite o expoente(maior ou igual a zero)
+0
+1
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+11
+Saindo...
+
+
+@TESTE RAIZ QUADRADA
+
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+6
+Raiz de quanto? (Digite um valor decimal ou inteiro maior ou igual a zero)
+-12
+Raiz de quanto? (Digite um valor decimal ou inteiro maior ou igual a zero)
+25
+5.0
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+6
+Raiz de quanto? (Digite um valor decimal ou inteiro maior ou igual a zero)
+50
+7.071067821067821
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+6
+Raiz de quanto? (Digite um valor decimal ou inteiro maior ou igual a zero)
+0
+0.0
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+11
+Saindo...
+
+@TESTE TABUADA
+
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+7
+Digite um numero para exibir tabuada
+5
+1 x 5 = 5
+2 x 5 = 10
+3 x 5 = 15
+4 x 5 = 20
+5 x 5 = 25
+6 x 5 = 30
+7 x 5 = 35
+8 x 5 = 40
+9 x 5 = 45
+10 x 5 = 50
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+7
+Digite um numero para exibir tabuada
+-2
+1 x -2 = -2
+2 x -2 = -4
+3 x -2 = -6
+4 x -2 = -8
+5 x -2 = -10
+6 x -2 = -12
+7 x -2 = -14
+8 x -2 = -16
+9 x -2 = -18
+10 x -2 = -20
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+11
+Saindo...
+
+
+@TESTE IMC
+
+
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+8
+Calculo do IMC
+Digite peso em kg:
+-2
+Digite peso em kg:
+0
+Digite peso em kg:
+60.5
+Digite a altura em metros:
+-2
+Digite a altura em metros:
+0
+Digite a altura em metros:
+1.68
+21.435657596371886
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+11
+Saindo...
+
+
+@TESTE FATORIAL
+
+
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+9
+Fatorial de quanto?(maior ou igual a 0)
+-4
+Fatorial de quanto?(maior ou igual a 0)
+5
+120
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+9
+Fatorial de quanto?(maior ou igual a 0)
+0
+1
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+11
+Saindo...
+
+
+@TESTE FIBONACCI
+
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+10
+Fibonacci de [a,b]
+Digite o valor de a
+-2
+Digite o valor de a
+2
+Digite o valor de b
+-3
+Digite o valor de b
+5
+1,2,3,5
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+10
+Fibonacci de [a,b]
+Digite o valor de a
+0
+Digite o valor de a
+3
+Digite o valor de b
+2
+'b' deve ser maior ou igual a 'a'
+Digite o valor de a
+6
+Digite o valor de b
+6
+8
+Aperte Enter para continuar
+<Enter Pressionado>
+
+<MENU>
+11
+Saindo...
