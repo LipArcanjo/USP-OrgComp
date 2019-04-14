@@ -1,10 +1,10 @@
 #UNIVERSIDADE DE SAO PAULO - INSTITUTO DE CIENCIAS MATEMATICAS E DE COMPUTACAO
-#1Âº Trabalho PrÃ¡tico de Organizacao e Arquitetura de Computadores
+#1º Trabalho Pratico de Organizacao e Arquitetura de Computadores
 #Alunos: 
-# 	 Guilherme Alves Lindo			
-#	 Guilherme Targon Marques Barcellos 	
+# 	 Guilherme Alves Lindo			8504480	
+#	 Guilherme Targon Marques Barcellos 	10724181
 # 	 Luan Icaro Pinto Arcanjo		10799230
-#	 Mateus Ferreira Gomes
+#	 Mateus Ferreira Gomes			10734773
 
 .data
 	.align 0
@@ -236,39 +236,56 @@ caso_3:
 caso_4: 
 	addi $t0, $zero, 4 #$t0 = 4
 	bne $t0,$t1, caso_5 #if ($t1 == 4) continua aqui, se nao testa caso_5
-divip:
-	li $v0, 4                   #Carrega codigo imprimir string
-	la $a0, divisao	    	    #Move a string "divisao"
-	syscall		            #Chama o SO para realizar operacao
+	
+	divip:
+		li $v0, 4                   #Carrega codigo imprimir string
+		la $a0, divisao	    	    #Move a string "divisao"
+		syscall		            #Chama o SO para realizar operacao
 	
 	
 	
-	li $v0, 4		   #Carrega codigo imprimir string
-	la $a0, digite1numero_m_d      #Move a string "digite1numero_m_d"
-	syscall			   #Chama o SO para realizar operacao
-
-	li $v0, 7		   #Carrega codigo ler double
-	syscall			   #Chama o SO para realizar operacao
-	mov.d $f2, $f0             #Move double lido para $f2	
+		li $v0, 4		   #Carrega codigo imprimir string
+		la $a0, digite1numero_m_d      #Move a string "digite1numero_m_d"
+		syscall			   #Chama o SO para realizar operacao
 	
-	li $v0, 4		   #Carrega codigo imprimir string
-	la $a0, digite2numero_m_d     #Move a string "digite2numero_m_d"
-	syscall			   #Chama o SO para realizar operacao
+		addi $t3, $zero, 32767     #Adiconando valor "32767"(2^15-1) ao registrador $t3, maximo de um numero inteiro de 16 bits
+		addi $t4, $zero, -32768    #Adiconando valor "-32768"(-2^15) ao registrador $t4, minimo de um numero inteiro de 16 bits
 	
 	
-	li $v0, 7	           #Carrega codigo ler double
-	syscall			   #Chama o SO para realizar operacao
-	mov.d $f4, $f0		   #Move double lido para $f4
+		li $v0, 5		   #Carrega codigo ler inteiro
+		syscall			   #Chama o SO para realizar operacao
+		move $t0, $v0              #Move inteiro lido para $t0	
+		
+		bgt $t0, $t3, divip       #Verificando se ultrapassa multiplicando maximo.
+		bgt $t4, $t0, divip	   #Verificando se ultrapassa o minimo.		
+	
+		li $v0, 4		   #Carrega codigo imprimir string
+		la $a0, digite2numero_m_d     #Move a string "digite2numero_m_d"
+		syscall			   #Chama o SO para realizar operacao
 	
 	
-	div.d $f6, $f2, $f4        #Divide conteudo de $f2 por $f4 e armazena em $f6
+		li $v0, 5	           #Carrega codigo ler inteiro
+		syscall			   #Chama o SO para realizar operacao
+		move $t1, $v0		   #Move inteiro lido para $t1
+		
+		bgt $t1, $t3, divip       #Verificando se ultrapassa multiplicando maximo.
+		bgt $t4, $t1, divip	   #Verificando se ultrapassa o minimo.
+		beq $t1, $zero, divip	   #Verifincando se o denominador nao eh 0	 	
+	
+		mtc1.d $t0, $f2		#colocando em um registrador de double para fazer divisoes com casas decimais
+  		cvt.d.w $f2, $f2	#Convertendo o valor de integer para double
+  		
+  		mtc1.d $t1, $f4		#colocando em um registrador de double para fazer divisoes com casas decimais
+  		cvt.d.w $f4, $f4	#Convertendo o valor de integer para double
+	
+		div.d $f6, $f2, $f4        #Divide conteudo de $f2 por $f4 e armazena em $f6
 	
 	
-	li $v0, 3		   #Carrega codigo imprimir double
-	mov.d $f12, $f6		   #Move $f6(resultado divisao) para $f12
-	syscall			   #Chama o SO para realizar operacao
+		li $v0, 3		   #Carrega codigo imprimir double
+		mov.d $f12, $f6		   #Move $f6(resultado divisao) para $f12
+		syscall			   #Chama o SO para realizar operacao
 	
-	j press_enter
+		j press_enter
 	
 #Potencia	
 caso_5:
@@ -614,7 +631,7 @@ imprime_menu:
 	syscall
 	
 	li $v0, 4
-	la $a0, menu6 #imprime a sÃ©tima linha da mensagem do menu
+	la $a0, menu6 #imprime a sÃƒÂ©tima linha da mensagem do menu
 	syscall
 	
 	li $v0, 4
